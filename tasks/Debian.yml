@@ -83,7 +83,7 @@
     cis_distribution_filename: cis_debian_linux_rcl.txt
   when: ansible_os_family == "Debian"
 
-- name: Debian/Ubuntu | Install OpenJDK-8 repo
+- name: Debian/Ubuntu | Install OpenJDK-21 repo
   ansible.builtin.apt_repository:
     repo: 'ppa:openjdk-r/ppa'
     state: present
@@ -96,9 +96,9 @@
     - wazuh_agent_config.cis_cat.disable == 'no'
     - wazuh_agent_config.cis_cat.install_java == 'yes'
   block:
-    - name: Debian/Ubuntu | Install OpenJDK 1.8
+    - name: Debian/Ubuntu | Install OpenJDK 21
       ansible.builtin.apt:
-        name: openjdk-8-jre
+        name: openjdk-21-jre
         state: present
         cache_valid_time: 3600
   become: true
@@ -108,7 +108,8 @@
 - name: Debian/Ubuntu | Install OpenScap
   ansible.builtin.apt:
     name:
-      - libopenscap8
+      - openscap-scanner
+      - openscap-utils
       - xsltproc
     state: present
   become: true
@@ -121,8 +122,8 @@
 - name: Debian/Ubuntu | Install OpenScap
   ansible.builtin.apt:
     name:
-      - openscap-common
-      - libopenscap25t64
+      - openscap-scanner
+      - openscap-utils
       - xsltproc
     state: present
   become: true
@@ -133,7 +134,7 @@
   until: wazuh_agent_OpenScap_package_install is succeeded
 
 - name: Debian/Ubuntu | Get OpenScap installed version
-  ansible.builtin.shell: "dpkg-query --showformat='${Version}' --show libopenscap8"
+  ansible.builtin.shell: "dpkg-query --showformat='${Version}' --show openscap-scanner"
   register: openscap_version
   changed_when: false
   when: wazuh_agent_config.openscap.disable == 'no'
