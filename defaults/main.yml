@@ -138,7 +138,7 @@ wazuh_agent_cis_cat:
   ciscat_path_win: 'C:\cis-cat'
 
 wazuh_agent_osquery:
-  disable: 'yes'
+  disable: 'no'
   run_daemon: 'yes'
   bin_path_win: 'C:\Program Files\osquery\osqueryd'
   log_path: '/var/log/osquery/osqueryd.results.log'
