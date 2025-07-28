@@ -25,7 +25,7 @@
   ansible.builtin.apt:
     name: "wazuh-agent={{ wazuh_agent_version }}-*"
     state: present
-    cache_valid_time: 3600
+    cache_valid_time: 0
   become: true
   when:
     - ansible_os_family|lower != "redhat"
@@ -89,7 +89,7 @@
         -G "{{ wazuh_agent_authd.groups | join(',') }}"
         {% endif %}
       register: agent_auth_output
-      notify: restart wazuh-agent
+      notify: Restart wazuh-agent
       vars:
         agent_name: "{% if single_agent_name is defined %}{{ single_agent_name }}{% else %}{{ ansible_hostname }}{% endif %}"
       when:
@@ -201,7 +201,7 @@
       register: manage_agents_output
       vars:
         agent_name: '{{ target_manager.agent_name | default(ansible_hostname) }}'
-      notify: restart wazuh-agent
+      notify: Restart wazuh-agent
   become: true
   when:
     - not ( wazuh_agent_authd.enable | bool )
@@ -230,7 +230,7 @@
     group: wazuh
     mode: "0644"
   become: true
-  notify: restart wazuh-agent
+  notify: Restart wazuh-agent
   tags:
     - init
     - config
@@ -243,7 +243,7 @@
     group: wazuh
     mode: "0640"
   become: true
-  notify: restart wazuh-agent
+  notify: Restart wazuh-agent
   tags:
     - init
     - config
